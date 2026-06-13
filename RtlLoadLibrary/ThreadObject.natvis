@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="ThreadObject">
+
+		<!-- 根显示字符串 - 更清晰的格式 -->
+		<DisplayString Condition="m_bValid">
+			ThreadObject [TID={m_ThreadId}, Handle=0x{m_hThread,Xh}, Priority={m_Priority}]
+		</DisplayString>
+		<DisplayString Condition="!m_bValid">
+			ThreadObject [Invalid, TID={m_ThreadId}]
+		</DisplayString>
+
+		<Expand>
+			<!-- 基础状态分组 -->
+			<Item Name="[状态]" ExcludeView="simple">m_bValid ? "有效" : "无效"</Item>
+			<Item Name="[线程ID]">m_ThreadId</Item>
+			<Item Name="[句柄]">m_hThread,Xh</Item>
+
+			<!-- 内存地址分组 -->
+			<Item Name="[启动地址]" Condition="m_bValid">m_StartAddr,Xh</Item>
+			<Item Name="[TEB地址]" Condition="m_bValid">m_TebAddr,Xh</Item>
+
+			<!-- 优先级（带名称） -->
+			<Item Name="[优先级(数值)]">m_Priority</Item>
+			<Synthetic Name="[优先级(名称)]">
+				<DisplayString Condition="m_Priority == -15">THREAD_PRIORITY_IDLE</DisplayString>
+				<DisplayString Condition="m_Priority == -2">THREAD_PRIORITY_LOWEST</DisplayString>
+				<DisplayString Condition="m_Priority == -1">THREAD_PRIORITY_BELOW_NORMAL</DisplayString>
+				<DisplayString Condition="m_Priority == 0">THREAD_PRIORITY_NORMAL</DisplayString>
+				<DisplayString Condition="m_Priority == 1">THREAD_PRIORITY_ABOVE_NORMAL</DisplayString>
+				<DisplayString Condition="m_Priority == 2">THREAD_PRIORITY_HIGHEST</DisplayString>
+				<DisplayString Condition="m_Priority == 15">THREAD_PRIORITY_TIME_CRITICAL</DisplayString>
+				<DisplayString>CUSTOM ({m_Priority})</DisplayString>
+			</Synthetic>
+
+			<!-- 时间信息 -->
+			<Synthetic Name="[创建时间]">
+				<DisplayString>Low={m_CreationTime.dwLowDateTime}, High={m_CreationTime.dwHighDateTime}</DisplayString>
+				<Expand>
+					<Item Name="dwLowDateTime">m_CreationTime.dwLowDateTime</Item>
+					<Item Name="dwHighDateTime">m_CreationTime.dwHighDateTime</Item>
+					<!-- 计算为64位值 -->
+					<Item Name="64位值">((unsigned __int64)m_CreationTime.dwHighDateTime &lt;&lt; 32) | m_CreationTime.dwLowDateTime</Item>
+				</Expand>
+			</Synthetic>
+
+			<Synthetic Name="[退出时间]" Condition="m_bValid">
+				<DisplayString>Low={m_ExitTime.dwLowDateTime}, High={m_ExitTime.dwHighDateTime}</DisplayString>
+				<Expand>
+					<Item Name="dwLowDateTime">m_ExitTime.dwLowDateTime</Item>
+					<Item Name="dwHighDateTime">m_ExitTime.dwHighDateTime</Item>
+					<Item Name="64位值">((unsigned __int64)m_ExitTime.dwHighDateTime &lt;&lt; 32) | m_ExitTime.dwLowDateTime</Item>
+				</Expand>
+			</Synthetic>
+
+			<Synthetic Name="[内核态时间]" Condition="m_bValid">
+				<DisplayString>Low={m_KernalTime.dwLowDateTime}, High={m_KernalTime.dwHighDateTime}</DisplayString>
+				<Expand>
+					<Item Name="dwLowDateTime">m_KernalTime.dwLowDateTime</Item>
+					<Item Name="dwHighDateTime">m_KernalTime.dwHighDateTime</Item>
+					<Item Name="64位值">((unsigned __int64)m_KernalTime.dwHighDateTime &lt;&lt; 32) | m_KernalTime.dwLowDateTime</Item>
+					<Item Name="微秒">(((unsigned __int64)m_KernalTime.dwHighDateTime &lt;&lt; 32) | m_KernalTime.dwLowDateTime) / 10</Item>
+				</Expand>
+			</Synthetic>
+
+			<Synthetic Name="[用户态时间]" Condition="m_bValid">
+				<DisplayString>Low={m_UserTime.dwLowDateTime}, High={m_UserTime.dwHighDateTime}</DisplayString>
+				<Expand>
+					<Item Name="dwLowDateTime">m_UserTime.dwLowDateTime</Item>
+					<Item Name="dwHighDateTime">m_UserTime.dwHighDateTime</Item>
+					<Item Name="64位值">((unsigned __int64)m_UserTime.dwHighDateTime &lt;&lt; 32) | m_UserTime.dwLowDateTime</Item>
+					<Item Name="微秒">(((unsigned __int64)m_UserTime.dwHighDateTime &lt;&lt; 32) | m_UserTime.dwLowDateTime) / 10</Item>
+				</Expand>
+			</Synthetic>
+
+			<!-- 原始成员变量（可折叠查看） -->
+			<Synthetic Name="[原始成员]" Condition="false" Optional="true">
+				<Expand>
+					<Item Name="m_bValid">m_bValid</Item>
+					<Item Name="m_ThreadId">m_ThreadId</Item>
+					<Item Name="m_hThread">m_hThread</Item>
+					<Item Name="m_StartAddr">m_StartAddr</Item>
+					<Item Name="m_TebAddr">m_TebAddr</Item>
+					<Item Name="m_CreationTime">m_CreationTime</Item>
+					<Item Name="m_Priority">m_Priority</Item>
+				</Expand>
+			</Synthetic>
+		</Expand>
+	</Type>
+</AutoVisualizer>

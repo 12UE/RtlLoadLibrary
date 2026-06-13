@@ -1,0 +1,46 @@
+# Build output
+Debug/
+Release/
+x64/
+output/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.ncb
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+ipch/
+
+# Object files
+*.obj
+*.o
+*.pch
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.iobj
+*.ipdb
+
+# IDA Pro database files
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+*.idb
+*.i64
+
+# Backup files
+*.bak
+
+# Log files
+*.log
+exit_log.txt
+
+# Precompiled headers
+*.gch

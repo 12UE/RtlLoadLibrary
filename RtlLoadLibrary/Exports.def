@@ -1,0 +1,13 @@
+LIBRARY
+EXPORTS
+	RtlGetModuleHandleA
+	RtlGetModuleHandleW
+	RtlGetProcAddress
+	RtlLoadLibraryExW
+	RtlLoadLibraryW
+	RtlLoadLibraryExA
+	RtlLoadLibraryA
+	RtlLoadLibraryInMemoryEx
+	RtlLoadLibraryInMemory
+	RtlGetSectionDataA
+	RtlGetSectionDataW
