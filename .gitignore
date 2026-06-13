@@ -2,7 +2,10 @@
 Debug/
 Release/
 x64/
+x86/
 output/
+[Bb]in/
+[Oo]bj/
 
 # Visual Studio
 .vs/
@@ -13,7 +16,20 @@ output/
 *.opensdf
 *.VC.db
 *.VC.opendb
+*.VC.VC.opendb
 ipch/
+enc_temp_folder/
+*.aps
+*.cache
+*.ilk
+*.manifest
+*.spec
+*.res
+
+# Build logs
+*.tlog
+*.lastbuildstate
+*.FileListAbsolute.txt
 
 # Object files
 *.obj
@@ -25,6 +41,21 @@ ipch/
 *.lib
 *.iobj
 *.ipdb
+
+# Executables and libraries (build output)
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Keep test fixture DLLs (required for unit tests)
+!RtlLoadLibrary/Dll32EXCEPTION.dll
+!RtlLoadLibrary/Dll32NOEXCEPT.dll
+!RtlLoadLibrary/DllEXCEPTION.dll
+!RtlLoadLibrary/MFCLibraryDelayImport64.dll
+!RtlLoadLibrary/X86MFCLIB.dll
+!RtlLoadLibrary/api-x-module.dll
+!RtlLoadLibrary/atl.dll
 
 # IDA Pro database files
 *.id0
@@ -44,3 +75,18 @@ exit_log.txt
 
 # Precompiled headers
 *.gch
+
+# NuGet
+packages/
+*.nupkg
+
+# OS generated
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Misc
+*.tmp
+*.temp
+~$*
