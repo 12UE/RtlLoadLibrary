@@ -211,6 +211,10 @@ RtlLoadLibrary/
 - 加载 64 位 DLL 需使用 x64 编译版本，加载 32 位 DLL 需使用 x86 编译版本
 - 不适用于 `.NET` 托管程序集
 
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！无论是 Bug 反馈、功能建议还是代码改进，我们都非常欢迎。
+
 ## 许可
 
 本项目基于 [MIT 许可证](LICENSE) 开源。

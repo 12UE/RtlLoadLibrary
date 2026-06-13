@@ -211,6 +211,10 @@ RtlLoadLibrary/
 - Loading 64-bit DLLs requires the x64 build; loading 32-bit DLLs requires the x86 build
 - Not applicable to .NET managed assemblies
 
+## Contributing
+
+Issues and Pull Requests are welcome! Feel free to report bugs, suggest features, or submit code improvements.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).

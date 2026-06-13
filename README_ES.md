@@ -211,6 +211,10 @@ RtlLoadLibrary/
 - Cargar DLLs de 64 bits requiere la compilación x64; cargar DLLs de 32 bits requiere la compilación x86
 - No aplicable a ensamblados administrados de .NET
 
+## Contribuciones
+
+¡Los Issues y Pull Requests son bienvenidos! No dudes en reportar errores, sugerir funcionalidades o enviar mejoras de código.
+
 ## Licencia
 
 Este proyecto está licenciado bajo la [Licencia MIT](LICENSE).
