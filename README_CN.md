@@ -213,4 +213,4 @@ RtlLoadLibrary/
 
 ## 许可
 
-仅供学习研究使用。
+本项目基于 [GNU 通用公共许可证 v2.0](LICENSE) 开源。

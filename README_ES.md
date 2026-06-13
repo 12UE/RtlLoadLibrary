@@ -213,4 +213,4 @@ RtlLoadLibrary/
 
 ## Licencia
 
-Solo para fines educativos y de investigación.
+Este proyecto está licenciado bajo la [Licencia Pública General de GNU v2.0](LICENSE).
