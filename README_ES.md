@@ -213,4 +213,4 @@ RtlLoadLibrary/
 
 ## Licencia
 
-Este proyecto está licenciado bajo la [Licencia Pública General de GNU v2.0](LICENSE).
+Este proyecto está licenciado bajo la [Licencia MIT](LICENSE).

@@ -213,4 +213,4 @@ RtlLoadLibrary/
 
 ## 许可
 
-本项目基于 [GNU 通用公共许可证 v2.0](LICENSE) 开源。
+本项目基于 [MIT 许可证](LICENSE) 开源。
