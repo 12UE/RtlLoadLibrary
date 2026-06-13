@@ -202,28 +202,28 @@ TEST_CASE(GetContinuousReadableMemorySize_min)
 
 // ===================================================================
 //  RtlLoadLibraryA Tests
-//  NOTE: Skipped - test DLL may not be available for current architecture.
-//  Uncomment when a compatible DLL is placed in the working directory.
 // ===================================================================
 
-
-
+#ifdef _M_IX86
 TEST_CASE(RtlLoadLibraryA_api_x_module)
 {
     HMODULE hMod = RtlLoadLibraryA("api-x-module.dll");
     ASSERT_NOT_NULL(hMod);
 }
 
-TEST_CASE(RtlLoadLibraryA_nonexistent)
-{
-    HMODULE hMod = RtlLoadLibraryA("nonexistent_library_xyz.dll");
-    ASSERT_TRUE(hMod == nullptr);
-}
-
 TEST_CASE(RtlLoadLibraryA_Dll32EXCEPTION)
 {
     HMODULE hMod = RtlLoadLibraryA("Dll32EXCEPTION.dll");
     ASSERT_NOT_NULL(hMod);
+}
+#endif
+
+
+
+TEST_CASE(RtlLoadLibraryA_nonexistent)
+{
+    HMODULE hMod = RtlLoadLibraryA("nonexistent_library_xyz.dll");
+    ASSERT_TRUE(hMod == nullptr);
 }
 
 
