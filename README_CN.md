@@ -1,6 +1,6 @@
 # RtlLoadLibrary
 
-**[English](README.md) | [中文](README_CN.md)**
+**[English](README.md) | [中文](README_CN.md) | [Español](README_ES.md)**
 
 Windows PE 手动内存加载库，支持从内存中直接加载 DLL 而无需落盘，绕过标准 `LoadLibrary` 机制。
 
