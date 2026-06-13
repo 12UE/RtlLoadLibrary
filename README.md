@@ -1,60 +1,62 @@
 # RtlLoadLibrary
 
-Windows PE 手动内存加载库，支持从内存中直接加载 DLL 而无需落盘，绕过标准 `LoadLibrary` 机制。
+**[English](README.md) | [中文](README_CN.md)**
 
-## 特性
+A Windows PE manual memory loader library that supports loading DLLs directly from memory without writing to disk, bypassing the standard `LoadLibrary` mechanism.
 
-- **内存加载**: 从内存缓冲区加载 PE 镜像，无需文件落盘
-- **API Set 解析**: 自动解析 `api-ms-win-*` / `ext-ms-win-*` 等虚拟 DLL 名到真实系统 DLL
-- **完整 PE 修复管线**:
-  - 导入表 (IAT) 修复
-  - 延迟导入表 (Delay-Load) 修复
-  - 重定位表 (Relocation) 修复
-  - TLS 回调执行
-  - 导出表修复
-  - 异常处理表 (SEH/CFG) 修复
-- **LdrLink 管理**: 将手动加载的模块链接到 PEB 的模块列表中
-- **Loader Lock 封装**: 提供 `RtlLockLoaderLock` / `RtlUnlockLoaderLock` 保护并发加载
-- **ANSI/Wide 双接口**: 所有核心 API 提供 `A` / `W` 两个版本
-- **异步加载**: 通过 `std::future` 支持异步 DLL 加载
-- **RAII 资源管理**: `GenericHandle` / `FileMap` 自动管理 Windows 内核句柄
-- **字符串加密**: 编译期 XOR 加密敏感字符串，防静态分析
+## Features
 
-## 构建
+- **Memory Loading**: Load PE images from memory buffers without file I/O
+- **API Set Resolution**: Automatically resolve `api-ms-win-*` / `ext-ms-win-*` virtual DLL names to real system DLLs
+- **Complete PE Fix-up Pipeline**:
+  - Import Address Table (IAT) fix-up
+  - Delay-Load Import fix-up
+  - Relocation fix-up
+  - TLS callback execution
+  - Export table fix-up
+  - Exception handling table (SEH/CFG) fix-up
+- **LdrLink Management**: Link manually loaded modules into PEB's module list
+- **Loader Lock Wrapper**: `RtlLockLoaderLock` / `RtlUnlockLoaderLock` for concurrent loading protection
+- **ANSI/Wide Dual Interface**: All core APIs provide both `A` and `W` versions
+- **Async Loading**: Asynchronous DLL loading via `std::future`
+- **RAII Resource Management**: `GenericHandle` / `FileMap` for automatic Windows kernel handle management
+- **String Encryption**: Compile-time XOR encryption of sensitive strings to prevent static analysis
 
-### 环境要求
+## Build
 
-- Visual Studio 2019 或更高版本
+### Requirements
+
+- Visual Studio 2019 or later
 - Windows SDK 10.0+
-- C++17 标准
+- C++17 standard
 
-### 编译
+### Compilation
 
-1. 打开 `RtlLoadLibrary.sln`
-2. 选择目标平台 (x86 / x64) 和配置 (Debug / Release)
-3. 生成解决方案
+1. Open `RtlLoadLibrary.sln`
+2. Select target platform (x86 / x64) and configuration (Debug / Release)
+3. Build the solution
 
-输出为 `RtlLoadLibrary.dll`。
+Output: `RtlLoadLibrary.dll`
 
-## API 参考
+## API Reference
 
-### 核心加载函数
+### Core Loading Functions
 
 ```cpp
-// 宽字符版本 — 按文件名加载 DLL
+// Wide-char version — load DLL by file name
 HMODULE WINAPI RtlLoadLibraryW(LPCWSTR lpLibFileName);
 
-// ANSI 版本
+// ANSI version
 HMODULE WINAPI RtlLoadLibraryA(LPCSTR lpLibFileName);
 
-// 扩展版本 — 支持文件句柄和标志
+// Extended version — supports file handle and flags
 HMODULE WINAPI RtlLoadLibraryExW(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags);
 HMODULE WINAPI RtlLoadLibraryExA(LPCSTR lpLibFileName, HANDLE hFile, DWORD dwFlags);
 
-// 从内存缓冲区加载
+// Load from memory buffer
 HMODULE WINAPI RtlLoadLibraryInMemory(PVOID lpBytes, DWORD dwSize);
 
-// 从内存缓冲区加载（扩展版，支持文件名和完整路径）
+// Load from memory buffer (extended, supports file name and full path)
 HMODULE WINAPI RtlLoadLibraryInMemoryEx(
     PVOID  lpBytes,
     DWORD  dwSize,
@@ -64,7 +66,7 @@ HMODULE WINAPI RtlLoadLibraryInMemoryEx(
 );
 ```
 
-### 模块查询
+### Module Query
 
 ```cpp
 HMODULE WINAPI RtlGetModuleHandleA(LPCSTR  lpModuleName);
@@ -72,7 +74,7 @@ HMODULE WINAPI RtlGetModuleHandleW(LPCWSTR lpModuleName);
 FARPROC WINAPI RtlGetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 ```
 
-### 区段/入口点
+### Section / Entry Point
 
 ```cpp
 PVOID WINAPI RtlGetSectionDataA(HMODULE hMod, LPCSTR  lpSecName);
@@ -87,45 +89,45 @@ void WINAPI RtlLockLoaderLock();
 void WINAPI RtlUnlockLoaderLock();
 ```
 
-### LDR 链表管理
+### LDR List Management
 
 ```cpp
 bool WINAPI AddLdrLink(const MY_LDR_DATA_TABLE_ENTRY& Entry, BOOL bInitialize);
 bool WINAPI RemoveLdrLink(const UNICODE_STRING* BaseName, const UNICODE_STRING* FullPath);
 ```
 
-### 工具函数
+### Utility Functions
 
 ```cpp
-// 异步加载
+// Async loading
 std::future<HMODULE> AsyncRtlLoadLibraryA(LPCSTR lpLibFileName);
 
-// API Set 名称检测
+// API Set name detection
 bool IsApiSetName(const std::wstring& name);
 
 ```
 
-## 使用示例
+## Usage Examples
 
-### 基础文件加载
+### Basic File Loading
 
 ```cpp
 #include "RtlLoadLibrary.h"
 
-// 加载 user32.dll（等价于 LoadLibraryW）
+// Load user32.dll (equivalent to LoadLibraryW)
 HMODULE hUser32 = RtlLoadLibraryW(L"user32.dll");
 
-// 获取函数地址
+// Get function address
 auto pMessageBox = (int(WINAPI*)(HWND, LPCWSTR, LPCWSTR, UINT))
     RtlGetProcAddress(hUser32, "MessageBoxW");
 
 pMessageBox(NULL, L"Hello", L"RtlLoadLibrary", MB_OK);
 ```
 
-### 从内存加载
+### Loading from Memory
 
 ```cpp
-// 读取 DLL 到内存
+// Read DLL into memory
 HANDLE hFile = CreateFileW(L"mylib.dll", GENERIC_READ, FILE_SHARE_READ,
     NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -134,23 +136,23 @@ std::vector<BYTE> buf(dwFileSize);
 ReadFile(hFile, buf.data(), dwFileSize, NULL, NULL);
 CloseHandle(hFile);
 
-// 从内存加载
+// Load from memory
 HMODULE hMod = RtlLoadLibraryInMemory(buf.data(), dwFileSize);
 
-// 获取导出函数
+// Get exported function
 auto pFunc = (void(*)())RtlGetProcAddress(hMod, "MyExportedFunc");
 pFunc();
 ```
 
-### 异步加载
+### Async Loading
 
 ```cpp
 auto future = AsyncRtlLoadLibraryA("kernel32.dll");
-// ... 做其他事情 ...
-HMODULE hMod = future.get();  // 阻塞等待加载完成
+// ... do other work ...
+HMODULE hMod = future.get();  // Block until loading completes
 ```
 
-### 线程安全加载
+### Thread-Safe Loading
 
 ```cpp
 RtlLockLoaderLock();
@@ -159,56 +161,56 @@ HMODULE hMod2 = RtlLoadLibraryInMemory(buf2, size2);
 RtlUnlockLoaderLock();
 ```
 
-## 架构概览
+## Architecture Overview
 
 ```
 RtlLoadLibrary/
-├── RtlLoadLibrary.h/cpp    # 导出 API 实现入口
-├── RtlMemory.h/cpp          # PE 核心加载引擎 (1453行)
-├── ApisetQuery.h/cpp        # API Set Schema 解析器 (单例)
-├── RtlGetModuleHandle.h/cpp # 自定义 GetModuleHandle 实现
-├── RtlGetProcAddress.h/cpp  # 自定义 GetProcAddress 实现
-├── LdrLink.h/cpp            # PEB LDR 链表操作
-├── GlobalObject.h/cpp       # 全局状态管理 (单例)
-├── KernelStruct.h           # NT 内部结构定义
-├── Singleton.h              # 单例模板基类
-├── GenericHandle.h          # RAII 句柄封装
-├── FileMap.h/cpp            # 文件映射 RAII 封装
-├── XorStr.h                 # 编译期字符串加密
-├── DebugPrint.h/cpp         # 日志系统
-├── StringUtils.h/cpp        # 宽窄字符转换
-├── ThreadObject.h/cpp       # 线程操作封装
-├── EnumModule.h/cpp         # 模块枚举
-├── EnumThread.h/cpp         # 线程枚举
-├── ValidAddress.h/cpp       # 地址有效性验证
-├── Exports.def              # 导出符号定义
-├── pch.h/cpp                # 预编译头
-└── main.cpp                 # 测试入口 (非库代码)
+├── RtlLoadLibrary.h/cpp    # Exported API implementation entry
+├── RtlMemory.h/cpp          # PE core loading engine (1453 lines)
+├── ApisetQuery.h/cpp        # API Set Schema resolver (singleton)
+├── RtlGetModuleHandle.h/cpp # Custom GetModuleHandle implementation
+├── RtlGetProcAddress.h/cpp  # Custom GetProcAddress implementation
+├── LdrLink.h/cpp            # PEB LDR linked list operations
+├── GlobalObject.h/cpp       # Global state management (singleton)
+├── KernelStruct.h           # NT internal structure definitions
+├── Singleton.h              # Singleton template base class
+├── GenericHandle.h          # RAII handle wrapper
+├── FileMap.h/cpp            # File mapping RAII wrapper
+├── XorStr.h                 # Compile-time string encryption
+├── DebugPrint.h/cpp         # Logging system
+├── StringUtils.h/cpp        # Wide/narrow character conversion
+├── ThreadObject.h/cpp       # Thread operation wrapper
+├── EnumModule.h/cpp         # Module enumeration
+├── EnumThread.h/cpp         # Thread enumeration
+├── ValidAddress.h/cpp       # Address validity verification
+├── Exports.def              # Export symbol definitions
+├── pch.h/cpp                # Precompiled header
+└── main.cpp                 # Test entry (non-library code)
 ```
 
-### 加载流程
+### Loading Flow
 
-1. 校验 PE 头部 (DOS/NT Header)
-2. 计算镜像总大小
-3. 申请虚拟内存 (优先使用 ImageBase，失败则 ASLR)
-4. 逐区段拷贝数据到虚拟内存
-5. 修复导入表 (IAT) — 递归加载依赖 DLL
-6. 修复延迟导入表
-7. 修复重定位表 (若基址改变)
-8. 修复导出表
-9. 修复异常处理表
-10. 执行 TLS 回调
-11. 链接到 PEB LDR 链表
-12. 调用 DllMain(DLL_PROCESS_ATTACH)
-13. 释放可丢弃区段内存
+1. Validate PE headers (DOS/NT Header)
+2. Calculate total image size
+3. Allocate virtual memory (prefer ImageBase, fallback to ASLR)
+4. Copy section data to virtual memory
+5. Fix-up Import Table (IAT) — recursively load dependent DLLs
+6. Fix-up Delay-Load Import Table
+7. Fix-up Relocation Table (if base address changed)
+8. Fix-up Export Table
+9. Fix-up Exception Handling Table
+10. Execute TLS callbacks
+11. Link into PEB LDR list
+12. Call DllMain(DLL_PROCESS_ATTACH)
+13. Free discardable section memory
 
-## 注意事项
+## Notes
 
-- 本项目仅供学习研究 Windows PE 加载机制使用
-- 从内存加载的 DLL 无法被 `GetModuleHandle` 等标准 API 找到，需使用本项目提供的 `RtlGetModuleHandle`
-- 加载 64 位 DLL 需使用 x64 编译版本，加载 32 位 DLL 需使用 x86 编译版本
-- 不适用于 `.NET` 托管程序集
+- This project is for educational and research purposes on Windows PE loading mechanisms only
+- DLLs loaded from memory cannot be found by standard APIs like `GetModuleHandle`; use the provided `RtlGetModuleHandle` instead
+- Loading 64-bit DLLs requires the x64 build; loading 32-bit DLLs requires the x86 build
+- Not applicable to .NET managed assemblies
 
-## 许可
+## License
 
-仅供学习研究使用。
+For educational and research purposes only.

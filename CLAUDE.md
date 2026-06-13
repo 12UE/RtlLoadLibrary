@@ -38,3 +38,10 @@ Before implementing:
 - Implement in small, testable increments.
 - Verify against requirements before considering done.
 - If verification fails, debug and fix — don't guess forward.
+
+## 5. Network Proxy
+**所有需要外网访问的命令（git push/pull、curl、npm 等）必须通过系统代理。**
+
+- HTTP/HTTPS 代理地址：`http://127.0.0.1:7890`
+- git 使用方式：`git -c http.proxy=http://127.0.0.1:7890 -c https.proxy=http://127.0.0.1:7890 push`
+- 环境变量方式：`$env:HTTP_PROXY="http://127.0.0.1:7890"; $env:HTTPS_PROXY="http://127.0.0.1:7890"`
